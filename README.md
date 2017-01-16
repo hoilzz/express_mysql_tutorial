@@ -20,4 +20,4 @@ $ node app.js
 
 ## 참조
 
-(https://github.com/velopert/mongoose_tutorial)[https://github.com/velopert/mongoose_tutorial]
+[https://github.com/velopert/mongoose_tutorial](https://github.com/velopert/mongoose_tutorial)
