@@ -1,0 +1,29 @@
+<h1>요요</h1>
+
+<table>
+    <tr>
+        <th>제목</th>
+        <th>저자</th>
+        <th>출간일</th>
+        <th>수정</th>
+        <th>삭제</th>
+    </tr>
+
+    <% books.forEach(function(book){ %>
+        <tr>
+            <td><%= book.title %></td>
+            <td><%= book.author %></td>
+            <td><%= book.published_date %></td>
+            <td>수정</td>
+            <td>삭제</td>
+        </tr>
+    <% }); %>
+</table>
+
+<div class="">
+    <a href="books/new">도서 추가하기</a>
+</div>
+
+
+
+</table>

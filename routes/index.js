@@ -2,6 +2,25 @@
 
 module.exports = function(app, mysql, connection)
 {
+
+	app.get('/', function(req, res){
+		connection.query("select * from books", function(err, books){
+			console.log(books);
+			books.forEach(function(book){
+				// console.log((new Date()).yyyymmdd());
+				book.published_date = new Date(book.published_date).yyyymmdd();
+				console.log(book.published_date);
+			});
+			res.render('index', {
+				title: "book store",
+				books: books,
+				result: ""
+			});
+			// res.status(200).json(books);
+		})
+
+	})
+
 	// GET ALL BOOKS
 	app.get('/api/books', function(req, res){
 		connection.query("select * from books", function(err, books){
@@ -30,6 +49,35 @@ module.exports = function(app, mysql, connection)
 		})
 	})
 
+	// FORM FOR ADDING BOOK
+	app.get('/books/new', function(req, res){
+		res.render('new');
+	});
+
+	app.post('/books', function(req, res){
+
+		console.log(req);
+		console.log("published_date : " + req.body.published_date);
+
+		var published_date = new Date(req.body.published_date);
+
+		console.log("published_date : " + published_date);
+
+		var book = {title: req.body.title, author: req.body.author, published_date: published_date};
+
+		var query = connection.query("INSERT INTO books SET ?", book, function(err, result){
+
+			if(err){
+				console.log(err);
+				throw err;
+			}
+			// res.render("index", {
+			// 	// result: book.title + " 추가되었습니다."
+			// });
+			res.redirect('/');
+		});
+	});
+
 	// CREATE BOOK
 	app.post('/api/books', function(req, res){
 		var published_date = new Date(req.body.published_date);
@@ -40,7 +88,6 @@ module.exports = function(app, mysql, connection)
 				console.log(err);
 				throw err;
 			}
-
 			res.status(200).send("success");
 		});
 		console.log(query);
@@ -72,6 +119,18 @@ module.exports = function(app, mysql, connection)
 			res.status(204).end();
 		})
 	});
+}
 
+// yyyymmdd 형태로 포매팅된 날짜 반환
+Date.prototype.yyyymmdd = function()
+{
+	// 네자리로 된 년도 숫자 반환->string
+    var yyyy = this.getFullYear().toString();
 
+	// 자스 반환값에서 월을 0부터 시작하므로 + 1
+    var mm = (this.getMonth() + 1).toString();
+    var dd = this.getDate().toString();
+
+	// mm이 10월~12월이 아니면 01월
+    return yyyy + (mm[1] ? mm : '0' + mm[0]) + (dd[1] ? dd : '0'+dd[0]);
 }

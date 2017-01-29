@@ -1,7 +1,10 @@
+
 // [LOAD PACKAGES]
 var express = require('express');
 var app	= express();
+var ejsLint = require('ejs-lint');
 var bodyParser = require('body-parser');
+var iconv = require('iconv');
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -9,6 +12,11 @@ var connection = mysql.createConnection({
   password : 'root',
   database : 'book_store'
 });
+
+
+app.set('views', './views');
+app.set('view engine', 'ejs');
+
 
 // [CONFIGURE ROUTER]
 
